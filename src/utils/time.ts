@@ -1,20 +1,21 @@
-import { AlgorithmFunction } from "../types";
+import { performance } from "perf_hooks";
 
 export function measureAverageTime(
-  algorithm: AlgorithmFunction,
-  arr: number[],
+  algorithm: (arr: number[]) => number[] | void,
+  generator: () => number[],
   runs: number
 ): number {
-  let totalTime = 0;
-  const arrCopy = [...arr];
+  const times: number[] = [];
 
   for (let i = 0; i < runs; i++) {
-    const copy = [...arrCopy];
+    const input = generator();
     const start = performance.now();
-    algorithm(copy);
+    algorithm([...input]);
     const end = performance.now();
-    totalTime += end - start;
+    times.push(end - start);
   }
 
-  return totalTime / runs;
+  const avg = times.reduce((acc, time) => acc + time, 0) / times.length;
+
+  return avg;
 }

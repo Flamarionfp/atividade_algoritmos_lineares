@@ -15,58 +15,58 @@ async function runBenchmarks(): Promise<BenchmarkResult[]> {
 
   for (let n = MIN_N; n <= MAX_N; n += STEP) {
     console.log(`Testando com n = ${n}...`);
-    const arr = generateRandomArray(n);
+
+    const generator = () => generateRandomArray(n);
 
     const result: Partial<BenchmarkResult> = { n };
 
     result.quickSort = measureAverageTime(
       algorithms.quickSort,
-      arr,
+      generator,
       RUNS_PER_ALGORITHM
     );
 
     result.mergeSort = measureAverageTime(
       algorithms.mergeSort,
-      arr,
+      generator,
       RUNS_PER_ALGORITHM
     );
 
     result.heapSort = measureAverageTime(
       algorithms.heapSort,
-      arr,
+      generator,
       RUNS_PER_ALGORITHM
     );
 
     result.countingSort = measureAverageTime(
       algorithms.countingSort,
-      arr,
+      generator,
       RUNS_PER_ALGORITHM
     );
 
     result.radixSort = measureAverageTime(
       algorithms.radixSort,
-      arr,
+      generator,
       RUNS_PER_ALGORITHM
     );
 
     result.bucketSort = measureAverageTime(
       algorithms.bucketSort,
-      arr,
+      generator,
       RUNS_PER_ALGORITHM
     );
 
-    console.log(`QuickSort: ${result.quickSort.toFixed(4)} ms \n`);
-    console.log(`MergeSort: ${result.mergeSort.toFixed(4)} ms \n`);
+    console.log(`QuickSort: ${result.quickSort.toFixed(4)} ms`);
+    console.log(`MergeSort: ${result.mergeSort.toFixed(4)} ms`);
     console.log(`HeapSort: ${result.heapSort.toFixed(4)} ms`);
-    console.log(`CountingSort: ${result.countingSort.toFixed(4)} ms \n`);
-    console.log(`RadixSort: ${result.radixSort.toFixed(4)} ms \n`);
-    console.log(`BucketSort: ${result.bucketSort.toFixed(4)} ms \n`);
+    console.log(`CountingSort: ${result.countingSort.toFixed(4)} ms`);
+    console.log(`RadixSort: ${result.radixSort.toFixed(4)} ms`);
+    console.log(`BucketSort: ${result.bucketSort.toFixed(4)} ms`);
 
     results.push(result as BenchmarkResult);
   }
 
   saveResultsToCSV(results);
-
   return results;
 }
 
@@ -94,7 +94,7 @@ function saveResultsToCSV(results: BenchmarkResult[]) {
 
 runBenchmarks()
   .then((results) => {
-    console.log("Comparações concluidas!");
+    console.log("Comparações concluídas!");
     console.log(`Total de ${results.length} tamanhos diferentes testados.`);
   })
   .catch((error) => {
